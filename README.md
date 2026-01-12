@@ -1,8 +1,4 @@
-Here's the **final version of your README.md**, with the enhanced project description, images, and additional sections:
-
----
-
-```md
+md
 # FastAPI MongoDB API 🚀
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
