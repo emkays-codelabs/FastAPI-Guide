@@ -5,70 +5,54 @@ from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 
-# -----------------------------
-# Load environment variables
-# -----------------------------
+# Load env only for local development
 load_dotenv()
+
 MONGO_URI = os.getenv("MONGODB_URI")
-DB_NAME = os.getenv("DB_NAME", "eurondb")  # default DB name
+DB_NAME = os.getenv("DB_NAME", "eurondb")
 
 if not MONGO_URI:
-    raise Exception("MONGODB_URI is not set! Check your environment variables.")
+    raise RuntimeError("MONGODB_URI is not set")
 
-# -----------------------------
-# Connect to MongoDB (Async)
-# -----------------------------
-client = AsyncIOMotorClient(MONGO_URI, tls=True)
+# MongoDB client (Atlas handles TLS automatically)
+client = AsyncIOMotorClient(MONGO_URI)
 db = client[DB_NAME]
 euron_data = db["euron_coll"]
 
-print("MongoDB connection successful!")
-
-# -----------------------------
-# FastAPI App
-# -----------------------------
 app = FastAPI(
     title="Euron API",
-    version="1.0",
-    description="API to insert and retrieve data from MongoDB Atlas"
+    version="1.0"
 )
 
-# -----------------------------
-# Pydantic Model
-# -----------------------------
 class EuronData(BaseModel):
     name: str
     phone: int
     city: str
     course: str
 
-# -----------------------------
-# Serialize MongoDB ObjectId
-# -----------------------------
 def serialize_mongo(doc: dict) -> dict:
-    """Convert MongoDB _id to string for JSON response"""
     doc["id"] = str(doc["_id"])
     del doc["_id"]
     return doc
 
-# -----------------------------
-# API Routes
-# -----------------------------
 @app.post("/euron/insert_data")
 async def insert_euron_data(data: EuronData):
     try:
         result = await euron_data.insert_one(data.model_dump())
-        return {"id": str(result.inserted_id), "message": "Data inserted successfully"}
+        return {"id": str(result.inserted_id)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/get_eurondata")
 async def get_all_data():
-    documents = []
-    async for doc in euron_data.find():
-        documents.append(serialize_mongo(doc))
-    return documents
+    try:
+        documents = []
+        async for doc in euron_data.find():
+            documents.append(serialize_mongo(doc))
+        return documents
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/")
 async def root():
-    return {"message": "Euron API is running. Use /docs for API documentation."}
+    return {"status": "API running"}
