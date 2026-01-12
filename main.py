@@ -4,26 +4,21 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
-import certifi
 
 # -----------------------------
 # Load environment variables
 # -----------------------------
 load_dotenv()
 MONGO_URI = os.getenv("MONGODB_URI")
-DB_NAME = os.getenv("DB_NAME", "eurondb")  # default if not set
+DB_NAME = os.getenv("DB_NAME", "eurondb")  # default DB name
 
 if not MONGO_URI:
-    raise Exception("MONGODB_URI is not set! Please check your .env file.")
+    raise Exception("MONGODB_URI is not set! Check your environment variables.")
 
 # -----------------------------
-# Connect to MongoDB (Async) with proper TLS
+# Connect to MongoDB (Async)
 # -----------------------------
-client = AsyncIOMotorClient(
-    MONGO_URI,
-    tls=True,
-    tlsCAFile=certifi.where()  # Fix SSL handshake issues
-)
+client = AsyncIOMotorClient(MONGO_URI, tls=True)
 db = client[DB_NAME]
 euron_data = db["euron_coll"]
 
@@ -51,7 +46,7 @@ class EuronData(BaseModel):
 # Serialize MongoDB ObjectId
 # -----------------------------
 def serialize_mongo(doc: dict) -> dict:
-    """Convert _id to string for JSON response"""
+    """Convert MongoDB _id to string for JSON response"""
     doc["id"] = str(doc["_id"])
     del doc["_id"]
     return doc
