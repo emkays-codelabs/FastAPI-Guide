@@ -1,4 +1,3 @@
-# main.py
 import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -10,7 +9,7 @@ from dotenv import load_dotenv
 # -----------------------------
 load_dotenv()
 MONGO_URI = os.getenv("MONGODB_URI")
-DB_NAME = os.getenv("DB_NAME", "eurondb")  # default if not set
+DB_NAME = os.getenv("DB_NAME", "eurondb")  # default database
 
 if not MONGO_URI:
     raise Exception("MONGODB_URI is not set! Please check your .env file.")
@@ -18,11 +17,19 @@ if not MONGO_URI:
 # -----------------------------
 # Connect to MongoDB (Async)
 # -----------------------------
-client = AsyncIOMotorClient(MONGO_URI, tls=True)
-db = client[DB_NAME]
-euron_data = db["euron_coll"]
-
-print("MongoDB connection successful!")
+# Safe TLS connection to Atlas
+try:
+    client = AsyncIOMotorClient(
+        MONGO_URI,
+        tls=True,                         # enforce TLS
+        tlsAllowInvalidCertificates=False # only use True for local testing
+    )
+    db = client[DB_NAME]
+    euron_data = db["euron_coll"]
+    print("✅ MongoDB connection successful!")
+except Exception as e:
+    print("❌ MongoDB connection failed:", e)
+    raise e
 
 # -----------------------------
 # FastAPI App
