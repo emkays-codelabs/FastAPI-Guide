@@ -1,13 +1,5 @@
-# Python
+.env
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-
-# Environment
-.env
-mymongo_env
-
-# IDEs
-.vscode/
-.idea/
+.venv/
+mymongo_env/
