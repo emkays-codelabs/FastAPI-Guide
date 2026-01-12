@@ -72,7 +72,6 @@ Perfect! If you just want to include the **project structure** section in your R
 
 ---
 
-```md
 ## 📁 Project Structure
 
 ```
@@ -87,8 +86,6 @@ FastAPI-Guide/ 🚀
 └── **pycache**/        # ⚡ Python cache files (auto-generated)
 
 ```
-```
-
 
 ## ⚙️ Environment Variables
 
