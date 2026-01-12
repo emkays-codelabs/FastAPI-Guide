@@ -1,5 +1,5 @@
-fastapi==0.103.1
-uvicorn==0.25.0
-motor==4.3.0
-pydantic==2.3.0
-python-dotenv==1.0.0
+fastapi
+uvicorn
+motor
+pydantic
+python-dotenv

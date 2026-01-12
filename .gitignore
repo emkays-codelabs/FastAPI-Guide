@@ -1,5 +1,10 @@
-.env
+# Python cache
 __pycache__/
 *.pyc
+
+# Virtual environments
 .venv/
 mymongo_env/
+
+# Environment variables
+.env
