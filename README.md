@@ -68,21 +68,27 @@ Feel free to customize this project for your use case, integrate more endpoints,
 
 ## 📁 Project Structure
 
-![Structure](https://raw.githubusercontent.com/emkays-codelabs/FastAPI-Guide/main/assets/project-structure.svg)
+Perfect! If you just want to include the **project structure** section in your README.md, here’s a **clean, clear version** with icons and emojis:
+
+---
+
+```md
+## 📁 Project Structure
 
 ```
 
-FastAPI-Guide/
+FastAPI-Guide/ 🚀
 │
-├── main.py                # FastAPI app & routes
-├── requirements.txt       # Python dependencies
-├── .gitignore
-├── .env.example           # Template for environment variables
-├── README.md              # This file
+├── main.py             # 🔹 FastAPI app and API routes
+├── requirements.txt    # 📦 Python dependencies
+├── .gitignore          # 🚫 Files/folders to ignore in Git
+├── .env.example        # 🔐 Example environment variables
+├── README.md           # 📝 Project documentation
+└── **pycache**/        # ⚡ Python cache files (auto-generated)
 
-````
+```
+```
 
----
 
 ## ⚙️ Environment Variables
 
